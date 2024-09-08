@@ -9,20 +9,28 @@ var _a;
     var skillsElement = document.getElementById('skills');
     var educationElement = document.getElementById('education');
     var experienceElement = document.getElementById('experience');
-    if (profilePictureElement && nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement) {
+    var userElement = document.getElementById('username');
+    if (userElement && profilePictureElement && nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement) {
         var name_1 = nameElement.value;
         var email = emailElement.value;
         var contact = phoneElement.value;
         var skills = skillsElement.value;
         var education = educationElement.value;
         var experience = experienceElement.value;
+        var username = userElement.value;
+        var uniquePath = "resumes/".concat(username.replace(/\s+/g, '_'), "_cv.html");
         var profilePictureFile = (_a = profilePictureElement.files) === null || _a === void 0 ? void 0 : _a[0];
         var profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : "";
         var resumeOutput = "\n      <h2>Generated Resume</h2>\n      ".concat(profilePictureURL ? "<img src=\"".concat(profilePictureURL, "\" alt=\"Profile Picture\" class=\"profile-Picture\">") : "", "\n      <p><strong>Name:</strong> <span id=\"edit-name\" class=\"editable\"> ").concat(name_1, " </span></p>\n      <p><strong>Email:</strong><span id=\"edit-email\" class=\"editable\"> ").concat(email, " </span></p>\n      <p><strong>Contact:</strong><span id=\"edit-phone\" class=\"editable\"> ").concat(contact, "  </span></p>\n\n      <h3>Skills</h3>\n      <p><span id=\"edit-skills\" class=\"editable\"> ").concat(skills, " </span></p>\n\n      <h3>Education</h3>\n      <p><span id=\"edit-resume\" class=\"editable\"> ").concat(education, " </span></p>\n\n      <h3>Work Experience</h3>\n      <p> <span id=\"edit-resume\" class=\"editable\"> ").concat(experience, " </span></p>\n    ");
+        var downloadLink = document.createElement('a');
+        downloadLink.href = "data:text/html;charset=utf-8" + encodeURIComponent(resumeOutput);
+        downloadLink.download = uniquePath;
+        downloadLink.textContent = ('Download your resume');
         var resumeOutputElement = document.getElementById('resume-output');
         if (resumeOutputElement) {
             resumeOutputElement.innerHTML = resumeOutput;
             makeEditable();
+            resumeOutputElement.appendChild(downloadLink);
         }
     }
     else {

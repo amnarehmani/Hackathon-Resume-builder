@@ -1,7 +1,7 @@
 document.getElementById('resume-form')?.addEventListener('submit', function(event) {
   event.preventDefault();
 
-   const profilePictureElement = document.getElementById('profilePicture') as HTMLInputElement
+   const profilePictureElement = document.getElementById('profilePicture') as HTMLInputElement;
 
     const nameElement = document.getElementById('name') as HTMLInputElement;
     const emailElement = document.getElementById('email') as HTMLInputElement;
@@ -10,13 +10,18 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
     const educationElement = document.getElementById('education') as HTMLInputElement;
     const experienceElement = document.getElementById('experience') as HTMLInputElement;
 
-  if (profilePictureElement && nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement) {
+    const userElement = document.getElementById('username') as HTMLInputElement;
+
+
+  if (userElement && profilePictureElement && nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement ) {
     const name = nameElement.value;
     const email = emailElement.value;
     const contact = phoneElement.value;
     const skills = skillsElement.value;
     const education = educationElement.value;
     const experience = experienceElement.value;
+    const username = userElement.value;
+    const uniquePath = `resumes/${username.replace(/\s+/g, '_')}_cv.html`
 
    const profilePictureFile = profilePictureElement.files?.[0]
    const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : "";
@@ -39,10 +44,17 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
       <p> <span id="edit-resume" class="editable"> ${experience} </span></p>
     `;
 
+    const downloadLink = document.createElement('a');
+    downloadLink.href = `data:text/html;charset=utf-8` + encodeURIComponent(resumeOutput)
+    downloadLink.download = uniquePath;
+    downloadLink.textContent = ('Download your resume');
+
     const resumeOutputElement = document.getElementById('resume-output');
     if (resumeOutputElement) {
       resumeOutputElement.innerHTML = resumeOutput;
       makeEditable();
+
+      resumeOutputElement.appendChild(downloadLink)
     } 
   } else {
     console.log('One or more inputs are missing');
