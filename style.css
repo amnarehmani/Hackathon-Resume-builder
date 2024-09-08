@@ -106,3 +106,13 @@ button:hover {
   background-image: linear-gradient(145deg, #f5d6cc, #daebc7);
   margin: 20px 0; 
 }
+
+.profile-Picture{
+  display: block;
+ margin: 0 auto;
+ border-radius: 500%;
+ width: 150px;
+ height: 150px;
+ object-fit: cover;
+
+}

@@ -1,14 +1,16 @@
 document.getElementById('resume-form')?.addEventListener('submit', function(event) {
   event.preventDefault();
 
-  const nameElement = document.getElementById('name') as HTMLInputElement;
-  const emailElement = document.getElementById('email') as HTMLInputElement;
-  const phoneElement = document.getElementById('contact') as HTMLInputElement;
-  const skillsElement = document.getElementById('skills') as HTMLInputElement;
-  const educationElement = document.getElementById('education') as HTMLInputElement;
-  const experienceElement = document.getElementById('experience') as HTMLInputElement;
+   const profilePictureElement = document.getElementById('profilePicture') as HTMLInputElement
 
-  if (nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement) {
+    const nameElement = document.getElementById('name') as HTMLInputElement;
+    const emailElement = document.getElementById('email') as HTMLInputElement;
+    const phoneElement = document.getElementById('contact') as HTMLInputElement;
+    const skillsElement = document.getElementById('skills') as HTMLInputElement;
+    const educationElement = document.getElementById('education') as HTMLInputElement;
+    const experienceElement = document.getElementById('experience') as HTMLInputElement;
+
+  if (profilePictureElement && nameElement && emailElement && phoneElement && skillsElement && educationElement && experienceElement) {
     const name = nameElement.value;
     const email = emailElement.value;
     const contact = phoneElement.value;
@@ -16,29 +18,70 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
     const education = educationElement.value;
     const experience = experienceElement.value;
 
+   const profilePictureFile = profilePictureElement.files?.[0]
+   const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : "";
+
+
     const resumeOutput = `
       <h2>Generated Resume</h2>
-      <p><strong>Name:</strong> ${name} </p>
-      <p><strong>Email:</strong> ${email} </p>
-      <p><strong>Contact:</strong> ${contact} </p>
+      ${profilePictureURL ? `<img src="${profilePictureURL}" alt="Profile Picture" class="profile-Picture">` : ""}
+      <p><strong>Name:</strong> <span id="edit-name" class="editable"> ${name} </span></p>
+      <p><strong>Email:</strong><span id="edit-email" class="editable"> ${email} </span></p>
+      <p><strong>Contact:</strong><span id="edit-phone" class="editable"> ${contact}  </span></p>
 
       <h3>Skills</h3>
-      <p>${skills}</p>
+      <p><span id="edit-skills" class="editable"> ${skills} </span></p>
 
       <h3>Education</h3>
-      <p>${education}</p>
+      <p><span id="edit-resume" class="editable"> ${education} </span></p>
 
       <h3>Work Experience</h3>
-      <p>${experience}</p>
+      <p> <span id="edit-resume" class="editable"> ${experience} </span></p>
     `;
 
     const resumeOutputElement = document.getElementById('resume-output');
     if (resumeOutputElement) {
       resumeOutputElement.innerHTML = resumeOutput;
-    } else {
-      console.log('The elements are not filled');
-    }
+      makeEditable();
+    } 
   } else {
     console.log('One or more inputs are missing');
   }
+
+    function makeEditable(){
+      const editableElement = document.querySelectorAll('.editable');
+      editableElement.forEach(element => {
+        element.addEventListener('click' , function(){
+          const currentElement = element as HTMLElement;
+          const currentValue = currentElement.textContent || "";
+
+
+
+          if(currentElement.tagName === "p" || currentElement.tagName === "SPAN"){
+            const input = document.createElement('input');
+            input.type = "text";
+            input.value = currentValue;
+            input.classList.add('editing-input')
+
+         input.addEventListener('blur' , function(){
+          currentElement.textContent = input.value;
+          currentElement.style.display = "inline";
+          input.remove()
+         })
+
+            currentElement.style.display = "none";
+            currentElement.parentNode?.insertBefore(input , currentElement)
+            input.focus()
+          }
+        })
+      })
+    }
+
+
+
+
+
+
 });
+
+      
