@@ -20,9 +20,11 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
     const skills = skillsElement.value;
     const education = educationElement.value;
     const experience = experienceElement.value;
+// unique path 
     const username = userElement.value;
     const uniquePath = `resumes/${username.replace(/\s+/g, '_')}_cv.html`
 
+// profile picture
    const profilePictureFile = profilePictureElement.files?.[0]
    const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : "";
 
@@ -44,6 +46,7 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
       <p> <span id="edit-resume" class="editable"> ${experience} </span></p>
     `;
 
+
     const downloadLink = document.createElement('a');
     downloadLink.href = `data:text/html;charset=utf-8` + encodeURIComponent(resumeOutput)
     downloadLink.download = uniquePath;
@@ -52,14 +55,43 @@ document.getElementById('resume-form')?.addEventListener('submit', function(even
     const resumeOutputElement = document.getElementById('resume-output');
     if (resumeOutputElement) {
       resumeOutputElement.innerHTML = resumeOutput;
-      makeEditable();
+      resumeOutputElement.classList.remove('hidden')
+      makeEditable()
 
-      resumeOutputElement.appendChild(downloadLink)
+    const btnContainer = document.createElement("div");
+    btnContainer.id = "btn-container";
+    resumeOutputElement.appendChild(btnContainer)
+
+    // PDF link Button
+    const downloadBtn = document.createElement("button");
+    downloadBtn.textContent = "Download as PDF";
+    downloadBtn.addEventListener("click" , () =>{
+      window.print()
+    });
+    btnContainer.appendChild(downloadBtn)
+
+
+    // link button
+      const linkBtn = document.createElement('button');
+      linkBtn.textContent = "Copy link";
+      linkBtn.addEventListener('click' , async() =>{
+        try {
+          const shareLink = `https://yourdomain.com/resumes/${name.replace(
+          /\s+/g,"_")}_cv.html`
+
+          await navigator.clipboard.writeText(shareLink)
+        } 
+        catch (err){
+          console.error("Link is not copied: " , err)
+          alert('Link is not copied please try again later')
+        }
+      });
+      btnContainer.appendChild(linkBtn);
     } 
   } else {
     console.log('One or more inputs are missing');
   }
-
+  // function for edit resume
     function makeEditable(){
       const editableElement = document.querySelectorAll('.editable');
       editableElement.forEach(element => {
